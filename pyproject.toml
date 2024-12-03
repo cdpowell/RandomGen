@@ -1,11 +1,12 @@
 [project]
-name = "spam-eggs"
-version = "0.0.0"
+name = "randomgen"
+version = "0.0a1"
 dependencies = [
   "numpy",
   "scipy",
   "pandas",
   "matplotlib",
+  "statsmodels"
 ]
 requires-python = ">=3.8"
 authors = [
