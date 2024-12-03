@@ -6,7 +6,9 @@ dependencies = [
   "scipy",
   "pandas",
   "matplotlib",
-  "statsmodels"
+  "statsmodels",
+  "python-docx",
+  "notebook"
 ]
 requires-python = ">=3.8"
 authors = [
