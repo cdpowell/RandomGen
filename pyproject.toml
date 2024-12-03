@@ -1,0 +1,31 @@
+[project]
+name = "spam-eggs"
+version = "0.0.0"
+dependencies = [
+  "numpy",
+  "scipy",
+  "pandas",
+  "matplotlib",
+]
+requires-python = ">=3.8"
+authors = [
+  {name = "Christian D. Powell", email = "cpowell74@gatech.edu"},
+]
+maintainers = [
+  {name = "Christian D. Powell", email = "cpowell74@gatech.edu"}
+]
+description = "A Python3 package for generating random variates."
+readme = "README.md"
+license = {file = "LICENSE"}
+keywords = ["random variable", "distribution", "monte carlo", "simulation"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python"
+]
+
+[project.urls]
+Homepage = "https://example.com"
+Documentation = "https://readthedocs.org"
+Repository = "https://github.com/me/spam.git"
+"Bug Tracker" = "https://github.com/me/spam/issues"
+Changelog = "https://github.com/me/spam/blob/master/CHANGELOG.md"
