@@ -1,12 +1,20 @@
 """
 Created on Wed. Nov. 27th, 2024
+Updated on Wed. Dec. 1st, 2024 by Christian D. Powell
+
+v0.0a1 Changelog:
+- Begins abstracting monte_carlo_rv class to allow for distributions or statistical tests to be passed to it.
+- Minor cleanup.
 
 authors: Christian D. Powell
 email: cpowell74@gatech.edu
 """
+__version__ = '0.0a1'
 import matplotlib.pyplot as plt
 import numpy as np
 from numpy.random import uniform
+from scipy import stats
+from statsmodels.stats.stattools import durbin_watson
 
 
 STATS = ['count', 'mean', 'std', 'min', '0.01', '0.05', '0.10', '0.25', '0.50', '0.75', '0.90', '0.95', '0.99', 'max']
@@ -27,6 +35,23 @@ class monte_carlo_rv():
         self.statistics = statistics
         self.rvs = np.array([])
         self.results = list()
+
+    def _inverse_transform_method(self):
+        """Use the Inverse Transform Method to generate a random variable based off the given distribution.
+        """
+        return self.dist.ppf(uniform(size=1))
+
+    def _test_statistic_sampling_method(self):
+        """
+        """
+        # generate normal sample of data
+        sample = np.random.normal(0, 1, self.samples)
+        if self.dist.lower() in ['kolmogorov-smirnov', 'kolmogorov_smirnov', 'kolmogorov smirnov', 'kolmogorov', 'smirnov']:
+            return stats.ks_2samp(sample, np.random.normal(size=self.samples))[0]
+        elif self.dist.lower() in ['durbin-watson', 'durbin_watson', 'durbin watson', 'durbin', 'watson']:
+            return stats.anderson(sample, dist='norm').statistic
+        elif self.dist.lower() in ['anderson-darling', 'anderson_darling', 'anderson darling', 'anderson', 'darling']:
+            return durbin_watson(sample)
 
     def _calculate_iteration_statistics(self):
         """Calculate the desired statistics as of the given iteration.
@@ -60,11 +85,14 @@ class monte_carlo_rv():
                 if i % 100 == 0:
                     print(i)
             # generate random variates
-            self.rvs = np.append(self.rvs, self.dist.ppf(uniform(size=1)))
+            if type(self.dist) == str:
+                self.rvs = np.append(self.rvs, self._test_statistic_sampling_method())
+            else:
+                self.rvs = np.append(self.rvs, self._inverse_transform_method())
             # calculate the iteration statistics
             self._calculate_iteration_statistics()
 
-    def theoretical_quartiles(self, verbose: bool = False):
+    def theoretical_quantiles(self, verbose: bool = False):
         """Quartile values based on using plugging the quartile float into the inverse cdf (ppf).
         """
         if verbose:
@@ -95,7 +123,7 @@ class monte_carlo_rv():
         # return list of quartile values
         return theoretical_quartiles, quartiles
 
-    def simulated_quartiles(self, verbose: bool = False):
+    def simulated_quantiles(self, verbose: bool = False):
         """Quartile values based on using np.quartile() on the generated random variates.
         """
         if verbose:
@@ -141,7 +169,10 @@ class monte_carlo_rv():
         """
         # get the index of the statistic in the list of the statistics
         i = self.statistics.index(statistic)
-        s, q = self.theoretical_quartiles()
+        if type(self.dist) != str:
+            s, q = self.theoretical_quantiles()
+        else:
+            s, q = list(), list()
         plt.figure()
         plt.plot(list(range(self.iterations)), [self.results[j][i] for j in list(range(self.iterations))])
         # plot theoretical quartile line
