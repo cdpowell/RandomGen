@@ -1,15 +1,15 @@
 """
 Created on Wed. Nov. 27th, 2024
-Updated on Wed. Dec. 1st, 2024 by Christian D. Powell
+Updated on Tue. Dec. 3rd, 2024 by Christian D. Powell
 
-v0.0a1 Changelog:
-- Begins abstracting monte_carlo_rv class to allow for distributions or statistical tests to be passed to it.
-- Minor cleanup.
+v0.0a2 Changelog:
+- Improves distribution histogram title.
+- Adjust figure size to fit two figures on a single letter page.
 
 authors: Christian D. Powell
 email: cpowell74@gatech.edu
 """
-__version__ = '0.0a1'
+__version__ = '0.0a2'
 import matplotlib.pyplot as plt
 import numpy as np
 from numpy.random import uniform
@@ -26,10 +26,11 @@ class monte_carlo_rv():
     The Monte Carlo simulation works by running uniform random varibles.
     """
 
-    def __init__(self, dist, iterations: int = 10_000, samples: int = 1, statistics: list = STATS):
+    def __init__(self, dist, dist_name: str = None, iterations: int = 10_000, samples: int = 1, statistics: list = STATS):
         """Initialize the Monte Carlo simulation.
         """
         self.dist = dist
+        self.dist_name = dist_name
         self.iterations = iterations
         self.samples = samples
         self.statistics = statistics
@@ -157,9 +158,12 @@ class monte_carlo_rv():
     def plot(self):
         """Display a histogram of the random variables generated in the simulation.
         """
-        plt.figure()
+        plt.figure(figsize=(5, 3.5))
         plt.hist(self.rvs, bins=20)
-        plt.title("Distribution Histogram")
+        if self.dist_name:
+            plt.title("{} Distribution Histogram ({} iterations)".format(self.dist_name, str(self.iterations)))
+        else:
+            plt.title("Distribution Histogram ({} iterations)".format(str(self.iterations)))
         plt.xlabel("value")
         plt.ylabel("frequency")
         plt.show()
@@ -173,7 +177,7 @@ class monte_carlo_rv():
             s, q = self.theoretical_quantiles()
         else:
             s, q = list(), list()
-        plt.figure()
+        plt.figure(figsize=(5, 3.5))
         plt.plot(list(range(self.iterations)), [self.results[j][i] for j in list(range(self.iterations))])
         # plot theoretical quartile line
         if statistic in q:
