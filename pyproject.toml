@@ -4,11 +4,8 @@ version = "0.0a1"
 dependencies = [
   "numpy",
   "scipy",
-  "pandas",
   "matplotlib",
-  "statsmodels",
-  "python-docx",
-  "notebook"
+  "statsmodels"
 ]
 requires-python = ">=3.8"
 authors = [
@@ -28,7 +25,11 @@ classifiers = [
 
 [project.urls]
 Homepage = "https://example.com"
-Documentation = "https://readthedocs.org"
 Repository = "https://github.com/me/spam.git"
-"Bug Tracker" = "https://github.com/me/spam/issues"
-Changelog = "https://github.com/me/spam/blob/master/CHANGELOG.md"
+
+[project.optional-dependencies]
+ntoebooks = [
+  "python-docx",
+  "notebook",
+  "pandas"
+]
