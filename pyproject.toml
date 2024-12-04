@@ -1,6 +1,6 @@
 [project]
 name = "randomgen"
-version = "0.0a1"
+version = "0.1"
 dependencies = [
   "numpy",
   "scipy",
