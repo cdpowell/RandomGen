@@ -42,6 +42,8 @@ RandomGen/
 
 ## Quickstart
 
+Below are examples of how to generate distributions using either the Inverse Transform Method or the Test Statistic Sampling Method. For additional examples see [this](scripts/data_figures.ipynb) iPython notebook.
+
 ### Inverse Transform Method
 
 ```python
